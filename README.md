@@ -1,8 +1,8 @@
-# Task 3 — CI/CD Pipeline (GitHub Actions)
+# CI/CD Pipeline (GitHub Actions)
 
 ## Overview
 
-An automated CI/CD pipeline built with **GitHub Actions** that triggers on every push to `main`. The pipeline builds the Task 2 Docker image, tags it with the Git commit SHA, pushes it to **AWS ECR**, and deploys the updated container to an **AWS ECS Fargate** service via a rolling update.
+An automated CI/CD pipeline built with **GitHub Actions** that triggers on every push to `main`. The pipeline builds the Application Docker image, tags it with the Git commit SHA, pushes it to **AWS ECR**, and deploys the updated container to an **AWS ECS Fargate** service via a rolling update.
 
 All AWS infrastructure (ECR, ECS cluster, service, IAM roles) is provisioned with **Terraform** in `task_3/terraform/`. The GitHub Actions workflow only manages the dynamic deployment cycle.
 
@@ -55,7 +55,7 @@ flowchart TD
 ```
 task_3/
 ├── terraform/
-│   ├── main.tf           # Provider + data sources (discovers Task 1 VPC/subnets by tag)
+│   ├── main.tf           # Provider + data sources (discovers Infrastructure VPC/subnets by tag)
 │   ├── variables.tf      # Input variables
 │   ├── terraform.tfvars  # Variable values (gitignored)
 │   ├── ecr.tf            # ECR repository + lifecycle policy (keep last 10 images)
@@ -73,7 +73,7 @@ task_3/
 
 | Requirement | Detail |
 |---|---|
-| Task 1 deployed | Task 3 Terraform discovers the VPC + subnets from Task 1 by name tag |
+| Infrastructure deployed | CI/CD Terraform discovers the VPC + subnets from Infrastructure by name tag |
 | AWS CLI configured | `aws sts get-caller-identity` must return your account |
 | GitHub Secrets set | `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in repo Settings → Secrets |
 

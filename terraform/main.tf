@@ -1,7 +1,7 @@
 # ==============================================================================
-# Task 3 — CI/CD Infrastructure
+# CI/CD Infrastructure
 # Provisions: ECR repository, ECS Fargate cluster, task definition, service
-# Reuses:     VPC and subnets from Task 1 (discovered via data sources)
+# Reuses:     VPC and subnets from Infrastructure (discovered via data sources)
 # ==============================================================================
 
 terraform {
@@ -27,7 +27,7 @@ provider "aws" {
   }
 }
 
-# ── Reuse Task 1 Networking (discovered by tag — no shared state required) ───
+# ── Reuse Infrastructure Networking (discovered by tag — no shared state required) ───
 
 data "aws_vpc" "task1" {
   tags = {

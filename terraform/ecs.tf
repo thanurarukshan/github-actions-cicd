@@ -1,5 +1,5 @@
 # ==============================================================================
-# Task 3 — ECS Fargate Cluster, Task Definition, Security Group & Service
+# ECS Fargate Cluster, Task Definition, Security Group & Service
 # ==============================================================================
 
 # ── CloudWatch Log Group ──────────────────────────────────────────────────────

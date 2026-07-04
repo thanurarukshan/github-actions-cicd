@@ -1,4 +1,4 @@
-# Task 3 — CI/CD Pipeline (GitHub Actions) — Execution Steps
+# CI/CD Pipeline (GitHub Actions) — Execution Steps
 
 > These are your personal execution notes (gitignored). Follow each step in order.
 
@@ -8,22 +8,22 @@
 
 This task builds a GitHub Actions CI/CD pipeline that:
 1. Triggers on push to `main`
-2. Builds the Docker image from **Task 2** (reusing the same Dockerfile and app)
+2. Builds the Docker image from **Application** (reusing the same Dockerfile and app)
 3. Tags the image with the Git commit SHA (immutable, traceable)
 4. Pushes the image to **AWS ECR** — provisioned via Terraform
 5. Deploys the updated image to **AWS ECS Fargate** — provisioned via Terraform
 6. Adds a workflow status badge to the README
 
-### Reusing Task 2
-> The Task 2 Docker project (`task_2/Dockerfile` and `task_2/app/`) is the application
+### Reusing Application
+> The Application Docker project (`task_2/Dockerfile` and `task_2/app/`) is the application
 > being built and pushed by this pipeline. No new application code is needed.
 
 ---
 
 ## Prerequisites
 
-### 1. Task 1 Must Be Running
-The Terraform in this task reads Task 1's VPC and subnets via tags. Task 1 must be deployed first.
+### 1. Infrastructure Must Be Running
+The Terraform in this task reads Infrastructure's VPC and subnets via tags. Infrastructure must be deployed first.
 
 ```bash
 cd task_1 && terraform output
@@ -99,7 +99,7 @@ Terraform outputs from Step 1:
 ```yaml
 # =============================================================================
 # CI/CD Pipeline — Build, Push to ECR, Deploy to ECS Fargate
-# Triggers on push to main. Uses Task 2 Dockerfile.
+# Triggers on push to main. Uses Application Dockerfile.
 # Infrastructure (ECR, ECS) is managed by task_3/terraform/.
 # =============================================================================
 
@@ -269,7 +269,7 @@ curl http://$PUBLIC_IP:8080
 ```
 task_3/
 ├── terraform/
-│   ├── main.tf           # Provider + data sources (Task 1 VPC/subnets)
+│   ├── main.tf           # Provider + data sources (Infrastructure VPC/subnets)
 │   ├── variables.tf
 │   ├── terraform.tfvars  # (gitignored)
 │   ├── ecr.tf            # ECR repo + lifecycle policy
@@ -307,7 +307,7 @@ terraform destroy
 
 | Issue | Solution |
 |---|---|
-| `terraform plan` fails — VPC not found | Ensure Task 1 is deployed and the `project_name` variable matches exactly |
+| `terraform plan` fails — VPC not found | Ensure Infrastructure is deployed and the `project_name` variable matches exactly |
 | ECR login fails in workflow | Verify `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` secrets; check IAM permissions |
 | ECS deploy times out | Check container logs: CloudWatch → Log groups → `/ecs/devops-test` |
 | Task fails health check | Verify container port 8080 is exposed in Dockerfile and security group allows it |

@@ -1,5 +1,5 @@
 # ==============================================================================
-# Task 3 — IAM Role for ECS Task Execution
+# IAM Role for ECS Task Execution
 # Allows ECS to pull images from ECR and write logs to CloudWatch
 # ==============================================================================
 
