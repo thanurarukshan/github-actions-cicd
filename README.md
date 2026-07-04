@@ -4,9 +4,8 @@
 
 An automated CI/CD pipeline built with **GitHub Actions** that triggers on every push to `main`. The pipeline builds the Application Docker image, tags it with the Git commit SHA, pushes it to **AWS ECR**, and deploys the updated container to an **AWS ECS Fargate** service via a rolling update.
 
-All AWS infrastructure (ECR, ECS cluster, service, IAM roles) is provisioned with **Terraform** in `task_3/terraform/`. The GitHub Actions workflow only manages the dynamic deployment cycle.
+All AWS infrastructure (ECR, ECS cluster, service, IAM roles) is provisioned with **Terraform** in `github_actions_cicd/terraform/`. The GitHub Actions workflow only manages the dynamic deployment cycle.
 
-**Marks:** 20 / 100  
 **Tools:** GitHub Actions, Terraform ≥ 1.15.0, AWS ECR, AWS ECS Fargate
 
 ---
@@ -53,7 +52,7 @@ flowchart TD
 ## File Structure
 
 ```
-task_3/
+github_actions_cicd/
 ├── terraform/
 │   ├── main.tf           # Provider + data sources (discovers Infrastructure VPC/subnets by tag)
 │   ├── variables.tf      # Input variables
@@ -89,7 +88,7 @@ task_3/
 ### Step 1 — Provision AWS infrastructure with Terraform
 
 ```bash
-cd task_3/terraform/
+cd github_actions_cicd/terraform/
 
 terraform init
 terraform plan
@@ -166,7 +165,7 @@ sleep 30
 # Force-delete ECR repo (images must be removed first)
 aws ecr delete-repository --repository-name devops-test-app --force --region us-east-1
 
-cd task_3/terraform/
+cd github_actions_cicd/terraform/
 terraform destroy
 ```
 

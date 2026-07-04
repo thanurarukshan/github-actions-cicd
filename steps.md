@@ -15,7 +15,7 @@ This task builds a GitHub Actions CI/CD pipeline that:
 6. Adds a workflow status badge to the README
 
 ### Reusing Application
-> The Application Docker project (`task_2/Dockerfile` and `task_2/app/`) is the application
+> The Application Docker project (`docker_containerization/Dockerfile` and `docker_containerization/app/`) is the application
 > being built and pushed by this pipeline. No new application code is needed.
 
 ---
@@ -26,7 +26,7 @@ This task builds a GitHub Actions CI/CD pipeline that:
 The Terraform in this task reads Infrastructure's VPC and subnets via tags. Infrastructure must be deployed first.
 
 ```bash
-cd task_1 && terraform output
+cd terraform_aws_infrastructure && terraform output
 # Confirm vpc_id and ec2_private_ips are shown
 ```
 
@@ -53,7 +53,7 @@ Your IAM user needs these managed policies:
 ## Step 1: Provision Infrastructure with Terraform
 
 ```bash
-cd task_3/terraform
+cd github_actions_cicd/terraform
 
 # Download providers (AWS ~6.x, null ~3.x)
 terraform init
@@ -100,7 +100,7 @@ Terraform outputs from Step 1:
 # =============================================================================
 # CI/CD Pipeline — Build, Push to ECR, Deploy to ECS Fargate
 # Triggers on push to main. Uses Application Dockerfile.
-# Infrastructure (ECR, ECS) is managed by task_3/terraform/.
+# Infrastructure (ECR, ECS) is managed by github_actions_cicd/terraform/.
 # =============================================================================
 
 name: Build, Push to ECR and Deploy to ECS
@@ -149,8 +149,8 @@ jobs:
         id: build-push
         uses: docker/build-push-action@v7
         with:
-          context:    ./task_2
-          file:       ./task_2/Dockerfile
+          context:    ./docker_containerization
+          file:       ./docker_containerization/Dockerfile
           push:       true
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
@@ -257,7 +257,7 @@ PUBLIC_IP=$(aws ec2 describe-network-interfaces \
   --query "NetworkInterfaces[0].Association.PublicIp" --output text)
 
 curl http://$PUBLIC_IP:8080
-# Expected: Hello from DevOps Test – Thanura
+# Expected: Hello from DevOps Environment – Thanura
 ```
 
 **Screenshot opportunity:** Terminal showing the curl response.
@@ -267,7 +267,7 @@ curl http://$PUBLIC_IP:8080
 ## File Summary
 
 ```
-task_3/
+github_actions_cicd/
 ├── terraform/
 │   ├── main.tf           # Provider + data sources (Infrastructure VPC/subnets)
 │   ├── variables.tf
@@ -294,7 +294,7 @@ aws ecs update-service \
   --region us-east-1
 
 # Wait ~30 seconds for tasks to drain, then destroy everything
-cd task_3/terraform
+cd github_actions_cicd/terraform
 terraform destroy
 ```
 
